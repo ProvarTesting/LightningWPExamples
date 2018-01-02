@@ -1,0 +1,44 @@
+<aura:component >
+    <aura:attribute name="products" type="List" default="[]" />
+    <aura:attribute name="lineItem" type="OpportunityLineItem" />
+    
+    <aura:registerEvent name="lineItemUpdated" type="c:AmountChanged" />
+    
+    <tr>
+        <td style="text-align:right">
+            <lightning:buttonIcon iconName="utility:preview" variant="bare" onclick="{! c.viewLineItem }" alternativeText="Preview" />
+        </td>
+        <td>
+            <lightning:select name="Product" value="{!v.lineItem.PricebookEntryId}" variant="label-hidden" class="ProductsList">
+                <aura:iteration items="{!v.products}" var="product">
+                    <option value="{!product.Id}">
+                        {!product.ProductCode} - {!product.Name}
+                    </option>
+                </aura:iteration>
+            </lightning:select>
+        </td>
+        <td>
+            <lightning:input type="number" name="Quantity" label="Quantity" variant="label-hidden" class="inputWidget" 
+                             value="{!v.lineItem.Quantity}" onchange="{!c.recalculate}" 
+                             required="true" min="0" max="10" step="1" aura:id="Quantity"
+                             messageWhenBadInput="Bad_Input" messageWhenValueMissing="Value_Missing"
+                             messageWhenRangeOverflow="Range_Overflow" messageWhenRangeUnderflow="Range_Underflow"
+                             messageWhenStepMismatch="Step_Mismatch" messageWhenTooLong="Too_Long"/>
+        </td>
+        <td>
+            <lightning:input type="number" name="UnitPrice" label="Unit Price" variant="label-hidden" class="inputWidget"
+                             value="{!v.lineItem.UnitPrice}" onchange="{!c.recalculate}"
+                             required="true" formatter="currency" step="0.01" aura:id="UnitPrice"
+                             min="{!v.lineItem.ListPrice * .50}" max="{!v.lineItem.ListPrice}"
+                             messageWhenBadInput="Bad_Input" messageWhenValueMissing="Value_Missing"
+                             messageWhenRangeOverflow="Can not charge more than list price"
+                             messageWhenRangeUnderflow="Discount can't be more than 50%"
+                             messageWhenStepMismatch="Step_Mismatch" messageWhenTooLong="Too_Long" />
+        </td>
+        <td>
+            <lightning:input type="number" name="TotalPrice" label="Total Price" variant="label-hidden" class="inputWidget"
+                             value="{!v.lineItem.TotalPrice}"
+                             disabled="true" formatter="currency" step="0.01" />
+        </td>
+    </tr>
+</aura:component>
