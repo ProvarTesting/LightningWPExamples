@@ -1,0 +1,68 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="Demo" >
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="opportunity" type="Opportunity"/>
+    <aura:attribute name="products" type="List" default="[]" />
+    <aura:attribute name="lineItems" type="List" default="[]" />
+    <aura:attribute name="OpportunityTotal" type="Decimal" default="0"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="lineItemUpdated" event="c:AmountChanged" action="{!c.amountChanged}" />
+    
+    <lightning:notificationsLibrary aura:id="toaster"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Id,Name,Description,Pricebook2Id,Probability,StageName"
+                      targetFields="{!v.opportunity}"
+                      targetError="{!v.recordError}"
+                      recordUpdated="{!c.handleOpportunityUpdated}" />
+    
+    <!-- Display Lightning Data Service errors, if any -->
+    <aura:if isTrue="{!not(empty(v.recordError))}">
+        <div class="recordError">
+            <ui:message title="Error" severity="error" closable="true">
+                {!v.recordError}
+            </ui:message>
+        </div>
+    </aura:if>
+    
+    <!-- Display Opportunity -->
+    <lightning:card title="{! v.opportunity.Name }">
+        <aura:set attribute="actions">
+            <lightning:button label="Save" variant="brand" onclick="{!c.saveLineItems}" />
+        </aura:set>
+        <div class="slds-p-horizontal_medium">
+            <table border="0">
+                <tr>
+                    <th colspan="1">Stage:</th>
+                    <td colspan="4">{!v.opportunity.StageName}</td>
+                </tr>
+                <tr>
+                    <th colspan="1">Probability:</th>
+                    <td colspan="4"><lightning:formattedNumber value="{!v.opportunity.Probability / 100.0}" style="percent" maximumFractionDigits="1"/></td>
+                </tr>
+                <tr>
+                    <th colspan="1" style="vertical-align: top;">Decription:</th>
+                    <td colspan="4">{!v.opportunity.Description}</td>
+                </tr>
+                <tr>
+                    <th colspan="1">Total:</th>
+                    <td colspan="4">
+                        <lightning:formattedNumber value="{!v.OpportunityTotal}" style="currency" currencyCode="USD" currencyDisplayAs="symbol"/>
+                    </td>
+                </tr>
+                <tr>
+                	<td colspan="5" class="slds-p-top_x-small">&nbsp;</td>
+                </tr>
+                <tr>
+                	<th colspan="2" class="slds-text-align_center">Product</th>
+                	<th class="slds-text-align_center">Quantity</th>
+                	<th class="slds-text-align_center">Unit Price</th>
+                	<th class="slds-text-align_center">Total Price</th>
+                </tr>
+                <aura:iteration items="{!v.lineItems}" var="li">
+                    <c:LineItem products="{!v.products}" lineItem="{!li}" />
+                </aura:iteration>
+            </table>
+        </div>
+    </lightning:card>
+</aura:component>
