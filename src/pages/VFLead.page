@@ -1,0 +1,17 @@
+<apex:page >
+    <apex:includeLightning />
+    <div id="lightning" />
+    <script>
+         $Lightning.use("c:DependencyApp", function() {
+         $Lightning.createComponent("c:quickLead",
+         { 
+         label : "Create Lead Lightning in VF"
+         },
+         "lightning",
+         function(cmp) {
+             console.log('Component created, do something cool here');
+         });
+         });
+     </script>
+ 
+</apex:page>
