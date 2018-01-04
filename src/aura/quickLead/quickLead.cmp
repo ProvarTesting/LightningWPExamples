@@ -1,0 +1,106 @@
+<aura:component controller="LeadController" implements="flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="newLead" type="Lead"
+                    default="{ 'sobjectType': 'Lead',
+                             'FirstName': '',
+                             'LastName': '',
+                             'Company': '',
+                             'Email': '',
+                             'Phone': ''}"/>    
+    
+    <!-- aura:registerEvent name="createLead" type="c:leadUpdate"/ -->
+    
+    <!-- PAGE HEADER -->
+    <div class="slds-page-header" role="banner">
+      <div class="slds-grid">
+        <div class="slds-col">
+          <p class="slds-text-heading--label">Leads</p>
+          <h1 class="slds-text-heading--medium">Quick Create</h1>
+        </div>
+      </div>
+    </div>
+    
+    <!-- LEAD FORM -->    
+    <div class="slds-col slds-col--padded slds-p-top--large">
+		<!-- We should use a seperate component but this is the simple ui:input example so we won't yet! -->
+       <div aria-labelledby="newexpenseform">
+        
+          <!-- BOXED AREA -->
+          <fieldset class="slds-box slds-theme--default slds-container--small">
+        
+            <legend id="newleadform" class="slds-text-heading--small 
+              slds-p-vertical--medium">
+              Add Lead
+            </legend>
+        
+            <!-- CREATE NEW EXPENSE FORM -->
+            <form class="slds-form--stacked">
+        
+              <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                      <ui:inputText aura:id="firstname" label="First Name"
+                          class="slds-input"
+                          labelClass="slds-form-element__label"
+                          value="{!v.newLead.FirstName}"
+                          required="false"/>
+                  </div>
+             </div>
+        
+             <div class="slds-form-element slds-is-required">
+                  <div class="slds-form-element__control">
+                      <ui:inputText aura:id="lastname" label="Last Name"
+                          class="slds-input"
+                          labelClass="slds-form-element__label"
+                          value="{!v.newLead.LastName}"
+                          required="true"/>
+        
+                  </div>
+              </div>
+                
+              <div class="slds-form-element slds-is-required">
+                  <div class="slds-form-element__control">
+                      <ui:inputText aura:id="company" label="Company"
+                          class="slds-input"
+                          labelClass="slds-form-element__label"
+                          value="{!v.newLead.Company}"
+                          required="true"/>
+        
+                  </div>
+              </div>        
+              <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                      <ui:inputEmail aura:id="email" label="Email"
+                          class="slds-input"
+                          labelClass="slds-form-element__label"
+                          value="{!v.newLeads.Email}"
+                          placeholder="who@where.com"/>
+                  </div>
+              </div>
+        
+              <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                      <ui:inputPhone aura:id="phone" label="Phone"
+                          class="slds-input"
+                          labelClass="slds-form-element__label"
+                          value="{!v.newLeads.Phone}"/>
+                  </div>
+              </div>
+    
+        
+              <div class="slds-form-element">
+                  <ui:button label="Create"
+                      class="slds-button slds-button--brand"
+                      press="{!c.clickCreateLead}"/>
+              </div>
+        
+            </form>
+            <!-- / CREATE NEW EXPENSE FORM -->
+        
+          </fieldset>
+          <!-- / BOXED AREA -->
+        
+        </div>
+
+    </div>
+
+</aura:component>
